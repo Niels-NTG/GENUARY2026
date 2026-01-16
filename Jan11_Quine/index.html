@@ -1,0 +1,48 @@
+<html><head>
+	<meta charset="UTF-8">
+	<title>Jan10_Quine</title>
+	<script src="https://cdn.jsdelivr.net/npm/p5@2.1.2/lib/p5.min.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		let tw = 0
+		function setup() {
+			createCanvas(1040, 1040)
+			colorMode(OKLCH, 1, 1, 1)
+
+			fill(255)
+			noStroke()
+
+			textFont('Recursive')
+			textWeight(300)
+			textSize(10)
+			textAlign(LEFT, CENTER)
+			tw = textWidth(getQuine())
+		}
+
+		function draw() {
+			blendMode(DIFFERENCE)
+			background(
+				norm(sin(frameCount * 0.001), -1, 1),
+				norm(cos(frameCount * 0.01), -1, 1),
+				norm(1 - sin(frameCount * 0.01), -1, 1),
+				0.01
+			)
+
+			translate(
+				(width / 2 - tw / 2) + (cos(frameCount * 0.01) + noise(frameCount * 0.001)) * width / 8,
+				height / 2 + (sin(frameCount * 0.01) + noise(frameCount * 0.001)) * height / 8
+			)
+			text(getQuine(), 0, 0)
+
+			blendMode(BLEND)
+			text(getQuine(), 0, 0)
+		}
+
+		function getQuine() {
+			const clonedDocument = document.documentElement.cloneNode(true)
+			// Remove body content, as this is not part of the original source.
+			clonedDocument.lastChild.innerHTML = ''
+			return clonedDocument.outerHTML.replace(/\t/g, '        ')
+		}
+	</script>
+</head>
+<body></body></html>
